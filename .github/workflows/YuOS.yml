@@ -137,7 +137,7 @@ jobs:
       uses: actions/upload-artifact@master
       if: always()
       with:
-        name: Padavan-packages-3.4
+        name: Padavan-packages-${{ github.event.inputs.target }}
         path: /opt/images
 
 # 暂时无用
