@@ -111,7 +111,7 @@ jobs:
         echo "CONFIG_FIRMWARE_INCLUDE_SHADOWSOCKS=y" >> .config #SS plus+
         echo "CONFIG_FIRMWARE_INCLUDE_SSOBFS=y" >> .config # simple-obfs混淆插件
         echo "CONFIG_FIRMWARE_INCLUDE_XRAY=y" >> .config #集成xray执行文件  ~4.5M
-        echo "CONFIG_FIRMWARE_INCLUDE_TROJAN=y" >> .config #集成trojan执行文件(1.1M左右)
+        echo "CONFIG_FIRMWARE_INCLUDE_TROJAN=n" >> .config #集成trojan执行文件(1.1M左右)
         echo "CONFIG_FIRMWARE_INCLUDE_V2RAY=n" >> .config #集成v2ray执行文件
         echo "CONFIG_FIRMWARE_INCLUDE_SSSERVER=n" >> .config #SS server
         echo "CONFIG_FIRMWARE_INCLUDE_DNSFORWARDER=n" >> .config #DNSFORWARDER
@@ -127,8 +127,24 @@ jobs:
         #########################################################################################
         #自定义添加其它功能请参考源码configs/templates/目录下的config文件。按照上面的格式添加即可
         #格式如下：
-        #sed -i '/自定义项/d' .config
+        ##sed -i '/自定义项/d' .config
+        ## 测试删除无用东西
+        sed -i '/CONFIG_FIRMWARE_INCLUDE_MTR=y/d' .config
+        sed -i '/CONFIG_FIRMWARE_INCLUDE_IPERF3=y/d' .config
+        sed -i '/CONFIG_FIRMWARE_INCLUDE_NANO=y/d' .config
+        sed -i '/CONFIG_FIRMWARE_INCLUDE_VLMCSD=y/d' .config
+        sed -i '/CONFIG_FIRMWARE_INCLUDE_LRZSZ=y/d' .config
+        sed -i '/CONFIG_FIRMWARE_INCLUDE_HTOP=y/d' .config
+        sed -i '/CONFIG_FIRMWARE_INCLUDE_SOCAT=y/d' .config
+        # sed -i '/CONFIG_FIRMWARE_INCLUDE_ARIA=y/d' .config
+        # sed -i '/CONFIG_FIRMWARE_INCLUDE_ARIA_WEB_CONTROL=y/d' .config
         #echo "自定义项=y" >> .config
+        ## 测试增加内容
+        echo "CONFIG_FIRMWARE_INCLUDE_SMARTDNS=y" >> .config
+        # echo "CONFIG_FIRMWARE_INCLUDE_ADGUARDHOME=y" >> .config       
+        # echo "CONFIG_FIRMWARE_INCLUDE_CADDY=y" >> .config
+        # echo "CONFIG_FIRMWARE_INCLUDE_TRANSMISSION=y" >> .config
+        # echo "CONFIG_FIRMWARE_INCLUDE_TRANSMISSION_WEB_CONTROL=y" >> .config
         #########################################################################################
         sudo ./clear_tree
         sudo ./build_firmware_modify $TNAME 0
