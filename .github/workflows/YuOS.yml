@@ -1,21 +1,43 @@
 #修改TNAME: K2P 中的K2P为你需要编译的型号，注意名称要与configs/templates/目录下的名字相同
-name: 小米路由R3G云编译-4.4
+name: 小米路由R3G-YuOS
 
-on: 
-  repository_dispatch:
+on:
   workflow_dispatch:
-  release:
-    types: [published]
-  push:
-    tags:
-    - 'v*'
-  #  branches: 
-  #    - master
-#  schedule:
-#    - cron: 0 8 * * 5
-#  watch:
-#   types: [started]
-
+    inputs:
+      target:
+        type: choice
+        description: '选择编译的路由器的型号'
+        options:
+        - K2P
+        - RM2100
+        - R2100
+        - K2P-USB
+        - CR660x
+        - JCG-Q20
+        - JCG-AC860M
+        - JCG-AC876M
+        - JCG-Y2
+        - MI-MINI
+        - MI-R3G
+        - MI-R4A
+        - MI-NANO
+        - MSG1500-7615
+        - MSG1500
+        - NEWIFI3
+        - R6220
+        - RT-AC85P
+        - XY-C1
+        - RS1200P
+        - TIMECLOUD
+        - WR330
+        default: 'MI-R3G'
+      rversion:
+        type: choice
+        description: '指定编译内核版本'
+        options:
+        - 3.4
+        - 4.4
+        defaule: '3.4'
 jobs:
   build:
     runs-on: ubuntu-20.04
@@ -46,8 +68,8 @@ jobs:
         mkdir -p /opt/images/
     - name: Build Firmware
       env:
-        TNAME: MI-R3G
-        KERNEL: 4.4
+        TNAME: ${{ github.event.inputs.target }}
+        KERNEL: ${{ github.event.inputs.rversion }}
       run: |
         cd /opt/rt-n56u/trunk
         if [ ! -f configs/templates/$TNAME.config ] ; then
@@ -93,14 +115,14 @@ jobs:
         echo "CONFIG_FIRMWARE_INCLUDE_V2RAY=n" >> .config #集成v2ray执行文件
         echo "CONFIG_FIRMWARE_INCLUDE_SSSERVER=n" >> .config #SS server
         echo "CONFIG_FIRMWARE_INCLUDE_DNSFORWARDER=n" >> .config #DNSFORWARDER
-        echo "CONFIG_FIRMWARE_INCLUDE_FRPC=n" >> .config #内网穿透FRPC
-        echo "CONFIG_FIRMWARE_INCLUDE_FRPS=n" >> .config #内网穿透FRPS
+        echo "CONFIG_FIRMWARE_INCLUDE_FRPC=y" >> .config #内网穿透FRPC
+        echo "CONFIG_FIRMWARE_INCLUDE_FRPS=y" >> .config #内网穿透FRPS
         echo "CONFIG_FIRMWARE_INCLUDE_NPC=n" >> .config #内网穿透NPS
         echo "CONFIG_FIRMWARE_INCLUDE_ALIDDNS=n" >> .config #阿里DDNS
         echo "CONFIG_FIRMWARE_INCLUDE_SRELAY=n" >> .config #可以不集成
         echo "CONFIG_FIRMWARE_INCLUDE_WYY=n" >> .config #网易云解锁
         echo "CONFIG_FIRMWARE_INCLUDE_WYYBIN=n" >> .config #网易云解锁GO版本执行文件（4M多）注意固件超大小,不集成会自动下载
-        echo "CONFIG_FIRMWARE_INCLUDE_ZEROTIER=y" >> .config #zerotier ~1.3M
+        echo "CONFIG_FIRMWARE_INCLUDE_ZEROTIER=n" >> .config #zerotier ~1.3M
         fi
         #########################################################################################
         #自定义添加其它功能请参考源码configs/templates/目录下的config文件。按照上面的格式添加即可
@@ -115,5 +137,29 @@ jobs:
       uses: actions/upload-artifact@master
       if: always()
       with:
-        name: Padavan-packages-4.4
+        name: Padavan-packages-3.4
         path: /opt/images
+
+# 暂时无用
+#       #########################################################################################
+#       #自定义添加其它功能请参考源码configs/templates/目录下的config文件。按照上面的格式添加即可
+#       #格式如下：
+#       #sed -i '/自定义项/d' .config
+#       ## 测试删除无用东西
+#       sed -i '/CONFIG_FIRMWARE_INCLUDE_MTR=y/d' .config
+#       sed -i '/CONFIG_FIRMWARE_INCLUDE_IPERF3=y/d' .config
+#       sed -i '/CONFIG_FIRMWARE_INCLUDE_NANO=y/d' .config
+#       sed -i '/CONFIG_FIRMWARE_INCLUDE_VLMCSD=y/d' .config
+#       sed -i '/CONFIG_FIRMWARE_INCLUDE_LRZSZ=y/d' .config
+#       sed -i '/CONFIG_FIRMWARE_INCLUDE_HTOP=y/d' .config
+#       sed -i '/CONFIG_FIRMWARE_INCLUDE_SOCAT=y/d' .config
+#       sed -i '/CONFIG_FIRMWARE_INCLUDE_ARIA=y/d' .config
+#       sed -i '/CONFIG_FIRMWARE_INCLUDE_ARIA_WEB_CONTROL=y/d' .config
+#       #echo "自定义项=y" >> .config
+#       ## 测试增加内容
+#       echo "CONFIG_FIRMWARE_INCLUDE_SMARTDNS=y" >> .config
+#       echo "CONFIG_FIRMWARE_INCLUDE_ADGUARDHOME=y" >> .config       
+#       echo "CONFIG_FIRMWARE_INCLUDE_CADDY=y" >> .config
+#       echo "CONFIG_FIRMWARE_INCLUDE_TRANSMISSION=y" >> .config
+#       echo "CONFIG_FIRMWARE_INCLUDE_TRANSMISSION_WEB_CONTROL=y" >> .config
+#       #########################################################################################        
