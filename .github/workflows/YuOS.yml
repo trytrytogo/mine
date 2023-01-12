@@ -6,7 +6,7 @@ on:
     inputs:
       target:
         type: choice
-        description: '选择编译的路由器的型号'
+        description: '选择路由器型号'
         options:
         - K2P
         - RM2100
@@ -44,7 +44,7 @@ jobs:
     if: github.event.repository.owner.id == github.event.sender.id
 
     steps:
-    - name: Checkout
+    - name: 准备编译环境
       uses: actions/checkout@master
     - name: Initialization environment
       env:
@@ -54,7 +54,7 @@ jobs:
         sudo apt-get -y install unzip libtool-bin curl cmake gperf gawk flex bison nano xxd fakeroot \
         cpio git python-docutils gettext automake autopoint texinfo build-essential help2man \
         pkg-config zlib1g-dev libgmp3-dev libmpc-dev libmpfr-dev libncurses5-dev libltdl-dev wget
-    - name: Clone source code
+    - name: 克隆源码
       env:
         KERNEL: ${{ github.event.inputs.rversion }}
         # KERNEL: 3.4
@@ -67,7 +67,7 @@ jobs:
         cd /opt/rt-n56u/toolchain-mipsel
         sh dl_toolchain.sh
         mkdir -p /opt/images/
-    - name: Build Firmware
+    - name: 编译固件
       env:
         TNAME: ${{ github.event.inputs.target }}
         KERNEL: ${{ github.event.inputs.rversion }}
@@ -153,7 +153,7 @@ jobs:
         sudo ./clear_tree
         sudo ./build_firmware_modify $TNAME 0
         sudo mv -f images/*.trx /opt/images/
-    - name : Upload packages
+    - name : 上传固件
       uses: actions/upload-artifact@master
       if: always()
       with:
