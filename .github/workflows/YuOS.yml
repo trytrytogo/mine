@@ -37,7 +37,11 @@ on:
         options:
         - 3.4
         - 4.4
-        defaule: '3.4'
+        defaule: '4.4'
+      time:
+        description: '手动指定编译时间'
+        required: true
+        default: '20230113'  
 jobs:
   build:
     runs-on: ubuntu-20.04
@@ -46,7 +50,7 @@ jobs:
     steps:
     - name: 检查代码
       uses: actions/checkout@master
-    - name: 准备编译环境
+    - name: 初始化编译环境
       env:
         DEBIAN_FRONTEND: noninteractive
       run: |
@@ -107,7 +111,7 @@ jobs:
         echo "CONFIG_FIRMWARE_INCLUDE_ALIDDNS=n" >> .config #aliddns
         echo "CONFIG_FIRMWARE_INCLUDE_SQM=y" >> .config #SQM 流控
         echo "CONFIG_FIRMWARE_INCLUDE_FRPS=y" >> .config #内网穿透FRPS 2023.1.11
-        echo "CONFIG_FIRMWARE_INCLUDE_FRPC=n" >> .config #内网穿透FRPC 2023.1.11
+        echo "CONFIG_FIRMWARE_INCLUDE_FRPC=y" >> .config #内网穿透FRPC 2023.1.11
         else
         echo "CONFIG_FIRMWARE_INCLUDE_MENTOHUST=n" >> .config #MENTOHUST
         echo "CONFIG_FIRMWARE_INCLUDE_SCUTCLIENT=n" >> .config #SCUTCLIENT
@@ -160,7 +164,7 @@ jobs:
       uses: actions/upload-artifact@master
       if: always()
       with:
-        name: Padavan-packages-${{ github.event.inputs.target }}-${{ github.event.inputs.rversion }}
+        name: Padavan-packages-${{ github.event.inputs.target }}-${{ github.event.inputs.rversion }}-${{ github.event.inputs.time }}
         path: /opt/images
 
 # 暂时无用
