@@ -144,7 +144,7 @@ jobs:
         sed -i '/CONFIG_FIRMWARE_INCLUDE_WIREGUARD=y/d' .config # 删除4.4的wireguard
         #echo "自定义项=y" >> .config
         ## 测试增加内容
-        echo "CONFIG_FIRMWARE_INCLUDE_SMARTDNS=y" >> .config
+        # echo "CONFIG_FIRMWARE_INCLUDE_SMARTDNS=y" >> .config
         # echo "CONFIG_FIRMWARE_INCLUDE_ADGUARDHOME=y" >> .config       
         # echo "CONFIG_FIRMWARE_INCLUDE_CADDY=y" >> .config
         # echo "CONFIG_FIRMWARE_INCLUDE_TRANSMISSION=y" >> .config
