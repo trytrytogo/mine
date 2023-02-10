@@ -18,6 +18,8 @@ jobs:
         run: |
           DIR=&(pwd)
           echo $DIR
+          echo "dir=$DIR" >> $GITHUB_ENV
+          echo "${{ env.dir }}" 
           # export LESSCHARSET=utf-8
           # token=$(cat ./log/alitoken.txt)
           # ntoken=$(curl -s https://api.aliyundrive.com/token/refresh -X POST -H "User-Agent:Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.54 Safari/537.36" -H "Rererer:https://www.aliyundrive.com/" -H "Content-Type:application/json" -d '{"refresh_token":"'$token'"}' | sed 's/,/\n/g' | grep refresh_token | cut -d \: -f2 | sed 's/"//g')
