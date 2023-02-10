@@ -15,6 +15,7 @@ jobs:
     steps:
 
       - name: Write Update Changelog
+        working-directory: actions
         run: |
           DIR=&(pwd)
           echo $DIR
