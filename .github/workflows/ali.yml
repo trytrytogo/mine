@@ -8,18 +8,16 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 20 # 自己加时间
-    env:
-      TZ: Asia/Shanghai
+    timeout-minutes: 1 # 自己加时间
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-          path: actions
+      # - name: Checkout
+      #   uses: actions/checkout@v3
+      #   with:
+      #     fetch-depth: 0
+      #     path: actions
 
-      - name: Write Update Changelog
+      - name: 更新Token
         working-directory: actions
         run: |
           export LESSCHARSET=utf-8
@@ -31,10 +29,8 @@ jobs:
           echo -n 当前token: ${ntoken}
           echo "newtoken=$ntoken" >> $GITHUB_ENV
           echo "${{ env.newtoken }}"
-          echo ${ntoken} > .github/log/alitoken.txt
-          # echo "${{ env.newtoken }}"
 
-      - name: Commit And Push
+      - name: 写入token
         working-directory: actions
         run: |
           git config --local user.name "github-actions[bot]"
