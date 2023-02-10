@@ -30,7 +30,7 @@ jobs:
           fi
           echo -n 当前token: ${ntoken}
           echo "newtoken=$ntoken" >> $GITHUB_ENV
-          echo ${ntoken} | tee .github/log/alitoken.txt
+          echo ${ntoken} > .github/log/alitoken.txt
           # echo "${{ env.newtoken }}"
 
       # - name: Commit And Push
