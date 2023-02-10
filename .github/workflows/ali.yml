@@ -1,0 +1,38 @@
+name: token
+
+on:
+  schedule:
+    - cron: 20,40 9-23 * * *
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20 # 自己加时间
+    env:
+      TZ: Asia/Shanghai
+
+    steps:
+
+      - name: Write Update Changelog
+        run: |
+          cd actions
+          export LESSCHARSET=utf-8
+          token=$(cat ./log/alitoken.txt)
+          ntoken=$(curl -s https://api.aliyundrive.com/token/refresh -X POST -H "User-Agent:Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.54 Safari/537.36" -H "Rererer:https://www.aliyundrive.com/" -H "Content-Type:application/json" -d '{"refresh_token":"'$token'"}' | sed 's/,/\n/g' | grep refresh_token | cut -d \: -f2 | sed 's/"//g')
+          if [ ! -n "$ntoken" ]; then
+            ntoken=$(curl -s https://auth.aliyundrive.com/v2/account/token -X POST -H "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.83 Safari/537.36" -H "Rererer:https://www.aliyundrive.com/" -H "Content-Type:application/json" -d '{"refresh_token":"'$token'", "grant_type": "refresh_token"}'| sed 's/,/\n/g' | grep refresh_token | cut -d \: -f2 | sed 's/"//g')
+          fi
+          echo -n 当前token: ${ntoken}
+          echo "newtoken=$ntoken" >> $GITHUB_ENV
+          echo "${{ env.newtoken }}"
+
+      - name: Commit And Push
+        working-directory: actions
+        run: |
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git pull
+          echo "${{ env.newtoken }}" > ./log/alitoken.txt
+          git add --all
+          git push origin main
