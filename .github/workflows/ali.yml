@@ -1,4 +1,5 @@
-name: token
+# 2023年2月10日13:52:44
+name: 刷新阿里Token
 
 on:
   schedule:
@@ -17,7 +18,7 @@ jobs:
           fetch-depth: 0
           path: actions
 
-      - name: 更新Token
+      - name: 1
         working-directory: actions
         run: |
           token=$(cat .github/log/alitoken.txt)
@@ -28,13 +29,13 @@ jobs:
           echo -n 当前token: ${ntoken}
           echo "newtoken=$ntoken" >> $GITHUB_ENV
 
-      - name: 写入token
+      - name: 2
         working-directory: actions
         run: |
           git config --local user.name "github-actions[bot]"
-          # git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git pull
           echo "${{ env.newtoken }}" > .github/log/alitoken.txt
           git add --all
-          git commit -m "refresh_token"
+          git commit -m "refresh_token_"${{ env.newtoken }}""
           git push origin main
