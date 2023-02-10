@@ -30,15 +30,16 @@ jobs:
           fi
           echo -n 当前token: ${ntoken}
           echo "newtoken=$ntoken" >> $GITHUB_ENV
+          echo ${ntoken} | tee .github/log/alitoken.txt
           # echo "${{ env.newtoken }}"
 
-      - name: Commit And Push
-        working-directory: actions
-        run: |
-          cd ..
-          git config --local user.name "github-actions[bot]"
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git pull
-          echo "${{ env.newtoken }}" > .github/log/alitoken.txt
-          git add --all
-          git push origin main
+      # - name: Commit And Push
+      #   working-directory: actions
+      #   run: |
+      #     cd ..
+      #     git config --local user.name "github-actions[bot]"
+      #     git config --local user.email "github-actions[bot]@users.noreply.github.com"
+      #     git pull
+      #     echo "${{ env.newtoken }}" > .github/log/alitoken.txt
+      #     git add --all
+      #     git push origin main
