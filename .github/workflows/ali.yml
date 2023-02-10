@@ -11,11 +11,11 @@ jobs:
     timeout-minutes: 1 # 自己加时间
 
     steps:
-      # - name: Checkout
-      #   uses: actions/checkout@v3
-      #   with:
-      #     fetch-depth: 0
-      #     path: actions
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          path: actions
 
       - name: 更新Token
         working-directory: actions
@@ -27,8 +27,8 @@ jobs:
             ntoken=$(curl -s https://auth.aliyundrive.com/v2/account/token -X POST -H "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.83 Safari/537.36" -H "Rererer:https://www.aliyundrive.com/" -H "Content-Type:application/json" -d '{"refresh_token":"'$token'", "grant_type": "refresh_token"}'| sed 's/,/\n/g' | grep refresh_token | cut -d \: -f2 | sed 's/"//g')
           fi
           echo -n 当前token: ${ntoken}
+          echo ${ntoken} > .github/log/alitoken.txt
           echo "newtoken=$ntoken" >> $GITHUB_ENV
-          echo "${{ env.newtoken }}"
 
       - name: 写入token
         working-directory: actions
