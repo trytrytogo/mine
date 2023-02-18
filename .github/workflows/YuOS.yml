@@ -143,8 +143,8 @@ jobs:
         sed -i '/CONFIG_FIRMWARE_INCLUDE_LRZSZ=y/d' .config
         sed -i '/CONFIG_FIRMWARE_INCLUDE_HTOP=y/d' .config
         sed -i '/CONFIG_FIRMWARE_INCLUDE_SOCAT=y/d' .config
-        # sed -i '/CONFIG_FIRMWARE_INCLUDE_ARIA=y/d' .config
-        # sed -i '/CONFIG_FIRMWARE_INCLUDE_ARIA_WEB_CONTROL=y/d' .config
+        sed -i '/CONFIG_FIRMWARE_INCLUDE_ARIA=y/d' .config
+        sed -i '/CONFIG_FIRMWARE_INCLUDE_ARIA_WEB_CONTROL=y/d' .config
         sed -i '/CONFIG_FIRMWARE_INCLUDE_WIREGUARD=y/d' .config # 删除4.4的wireguard
         sed -i '/CONFIG_FIRMWARE_INCLUDE_LPRD=y/d' .config # # 尝试删除LPRD打印
         sed -i '/CONFIG_FIRMWARE_INCLUDE_U2EC=y/d' .config # # 尝试删除USB网络打印
